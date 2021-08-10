@@ -50,4 +50,5 @@ def decrypt(cipherText, Mkey, Akey):
     plainText += num(((char(i)+new_Akey)*new_Mkey)%26)
   return plainText
 plain = decrypt(cipher, key1, key2)
-print("\n\n",plain)
+print("\n\n")
+print(plain)
