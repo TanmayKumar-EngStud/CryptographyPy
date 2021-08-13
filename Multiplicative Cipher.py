@@ -47,6 +47,15 @@ def decrypt(cipherText, key):
   print(new_key)
   return plainText
 
+# Defining Function for Extended Euclidean algorithm to find the inverse key
+def egcd(a, b):
+  if a == 0:
+    return (b, 0, 1)
+  else:
+    g, y, x = egcd(b % a, a)
+    return (g, x - (b // a) * y, y)
+
+
 plain = decrypt(cipher, key)
 #Now we will print the plain text
 print("The plain text is: ", plain)
