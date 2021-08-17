@@ -52,3 +52,10 @@ def decrypt(cipherText, Mkey, Akey):
 plain = decrypt(cipher, key1, key2)
 print("\n\n")
 print(plain)
+
+def EuclideanAlgorithm(a, b):
+  if b == 0:
+    return a
+  else:
+    return EuclideanAlgorithm(b, a % b)
+    # Github Copilot
