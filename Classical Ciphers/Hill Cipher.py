@@ -2,14 +2,21 @@ import math
 from os import system
 system("clear")
 
-plainText = input("Enter the plain text : ")
-key = input("Enter your key here : ")
+# plainText = input("Enter the plain text : ")
+# key = input("Enter your key here : ")
+
+plainText = "ACT"
+key = "HILLMAG"
+
+print(f"Plain Text is : {plainText}")
+print(f"Key is        : {key}\n")
 
 #I am adding fillers so that if the len(key) is not perfect square thus we can use this additional 
 #alphabet to fill the rest of the key matrix
 def makeKeyMatrix(key):
     matrix = []
-    
+    # I am adding fillers because even if the key's Length is not equivalent to a prefect square 
+    # It will still give the correct result.
     fillers = "abcdefghijklmnopqrstuvwxyz"
     MAXLEN = math.ceil(math.sqrt(len(key)))
     for i in range(MAXLEN):
@@ -25,18 +32,15 @@ def makeKeyMatrix(key):
     return matrix
 
 
-#This is just for presentation like how the matrix will look like
+#This is just for presentation of how the matrix will look like
 def showMatrix(matrix):
     for i in range(len(matrix)):
         for j in range (len(matrix[i])):
             print(f"{matrix[i][j]:{5}}", end=" ")
         print()
-matrix =makeKeyMatrix(key)
-showMatrix(matrix)
 
 
-# Above functions works well
-def makePlainTextMatrix(plainText, length = len(plainText)):
+def generateTextMatrix(plainText, length = len(plainText)):
     matrix = []
     for i in range(length):
         temp =[]
@@ -47,13 +51,19 @@ def makePlainTextMatrix(plainText, length = len(plainText)):
         matrix.append(temp)
     return matrix
 
-def mod(a,b):
-    return a%b
+# def mod(a,b):
+#     return a%b
 
 def MultiInv(n):
     for i in range(26):
         if n*i%26 == 1:
+            print(f"\nMultiplicative Inverse of Modulation of Determinant is : {i}\n")
             return i
+    # if n == 0:
+    #     return (26, 0, 1)
+    # else:
+    #     g, y, x = MultiInv(26 % n)
+    #     return (g, x - (26 // n) * y, y)
 
 def matrixMultiply(matrix1, matrix2):
     matrix3 = []
@@ -62,26 +72,44 @@ def matrixMultiply(matrix1, matrix2):
         for j in range(len(matrix2[0])):
             temp = 0
             for k in range(len(matrix2)):
-                temp += mod(matrix1[i][k] * matrix2[k][j],26)
+                temp += (matrix1[i][k] * matrix2[k][j])%26
             matrix3[i].append(temp)
     return matrix3
+
+def TakeMod(Matrix):
+    result = []
+    for i in range (len(Matrix)):
+        temp = []
+        for j in range( len(Matrix[0])):
+            temp.append(Matrix[i][j]%26)
+        result.append(temp)
+    return result
 
 
 def Encryption(plainText, key):
     keyMatrix = makeKeyMatrix(key)
-    plainTextMatrix = makePlainTextMatrix(plainText, len(keyMatrix[0]))
+    print("This is the key matrix :")
+    showMatrix(keyMatrix)
+
+    plainTextMatrix  = generateTextMatrix(plainText, len(keyMatrix[0]))
     cipherTextMatrix = matrixMultiply(keyMatrix, plainTextMatrix)
+    
     cipherText = ""
+    print("\nPlain Text Matrix :")
     showMatrix(plainTextMatrix)
+    cipherTextMatrix = TakeMod(cipherTextMatrix)
+    print("\nCipher Text Matrix :")
     showMatrix(cipherTextMatrix)
+
     for i in range(len(cipherTextMatrix)):
         for j in range(len(cipherTextMatrix[0])):
-            cipherText += chr(cipherTextMatrix[i][j]%26 + 65)
+            cipherText += chr(cipherTextMatrix[i][j] + 65)
     return cipherText
 
 cipherText = Encryption(plainText, key)
-print(f"This is the generated cipher text : {cipherText}")
+print(f"\nGenerated Cipher Text : {cipherText}")
 
+#Generates the Smaller matrix, just the part of calculation for taking determinant.
 def MiniMatrix(Matrix,i):
     newMatrix = []
     for j in range(1, len(Matrix)):
@@ -100,17 +128,6 @@ def Det(Matrix, num =0):
         k =MiniMatrix(Matrix,i) 
         num += Matrix[0][i]*Det(k, num)
     return num
-#Determinant of matrix is working well.
-
-def makeone(Matrix, i, j):
-    newMatrix= []
-    size = len(Matrix)
-    for x in range(size):
-        temp =[]
-        for y in range(size):
-            temp.append(Matrix[(x+i)%size][(y+j)%size])
-        newMatrix.append(temp)
-    return newMatrix
 
 def Transpose(Matrix):
     result = []
@@ -139,11 +156,13 @@ def Adj(Matrix):
         temp= []
         for j in range(1,len(newMatrix)-1):
             part = newMatrix[i][j]*newMatrix[i+1][j+1] - newMatrix[i+1][j]*newMatrix[i][j+1]
-            temp.append(part)
+            temp.append(part%26)
         resultantMatrix.append(temp)
-    
-    return Transpose(resultantMatrix)
-#Adjoint is working well
+    resultantMatrix= Transpose(resultantMatrix)
+
+    print("\nAdjoint With (mod 26): ")
+    showMatrix(resultantMatrix)
+    return resultantMatrix
 
 def divide(Matrix, number):
     newMatrix=[]
@@ -151,26 +170,30 @@ def divide(Matrix, number):
     for i in range (size):
         temp = []
         for j in range(size):
-            temp.append(mod(mod(Matrix[i][j],26)*number,26))
+            temp.append(((Matrix[i][j]*number)%26))
         newMatrix.append(temp)
     return newMatrix
 
 def InverseMatrix(Matrix):
     newMatrix= []
-    det = Det(Matrix)
-    newMatrix = divide(Adj(Matrix),MultiInv(mod(det,26)))
+    det = Det(Matrix)%26
+    multiInv = MultiInv(det)
+    print(f"\nMultiplicative Inverse of Determinant is :{multiInv}")
+    newMatrix = divide(Adj(Matrix), multiInv)
+    print("\nInverse Matrix with (mod 26):")
+    showMatrix(newMatrix)
     return newMatrix
 
 def Decryption(cipherText, key):
     keyMatrix = makeKeyMatrix(key)
-    cipherMatrix = makePlainTextMatrix(cipherText)
+    cipherMatrix = generateTextMatrix(cipherText)
     InvKey = InverseMatrix(keyMatrix)
-    plainMatrix = matrixMultiply(InvKey, cipherMatrix)
+    plainMatrix = TakeMod(matrixMultiply(InvKey, cipherMatrix))
     NewplainText =""
-    print(plainMatrix)
+
     for i in plainMatrix:
-        NewplainText += chr(i[0]%26 + 65)
+        NewplainText += chr(i[0]+ 65)
     return NewplainText
 
 GeneratedPlainText = Decryption(cipherText, key)
-print(GeneratedPlainText)
+print(f"\nGenerated Plain Text : {GeneratedPlainText}")
