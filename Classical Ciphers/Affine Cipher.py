@@ -58,4 +58,5 @@ def EuclideanAlgorithm(a, b):
     return a
   else:
     return EuclideanAlgorithm(b, a % b)
-    # Github Copilot
+    
+# There is an Error in this program I will fix it later.
