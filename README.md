@@ -7,5 +7,7 @@ This Repository includes the following :
   * Affine Cipher
   * Playfair Cipher
   * Hill Cipher
+  * Vignere Cipher
+  * Vernam Cipher
 <hr>
 I will add more things in this repository later on.
