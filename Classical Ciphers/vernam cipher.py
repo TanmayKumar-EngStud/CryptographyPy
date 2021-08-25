@@ -1,7 +1,7 @@
 from os import system
 system('clear')
 
-plainText = "HelloThere"
+plainText = "Hi I am Tanmay Kumar Singh Call me TKS"
 key = "TGHYPTXYUO"
 
 
@@ -10,6 +10,7 @@ print(f"Key is        : {key}")
 
 def modify(text):
   text = text.lower()
+  text = text.replace(" ", "")
   result = []
   for i in text:
     result.append(ord(i) - ord('a'))

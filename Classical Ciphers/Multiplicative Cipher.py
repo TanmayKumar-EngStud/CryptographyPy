@@ -6,7 +6,7 @@ os.system('clear')
 # key = int(input("Enter the key: "))
 
 plainText = "Test"
-key = 3
+key = 7
 
 # This is to convert alphabets to their associated numbers
 

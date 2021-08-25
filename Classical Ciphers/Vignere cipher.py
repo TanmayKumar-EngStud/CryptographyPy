@@ -2,8 +2,8 @@ from os import system
 system('clear')
 
 
-plainText = "Give money"
-key  = "Lock"
+plainText = "Give me all of your money"
+key  = "Thief"
 
 print(f"Plain Text is : {plainText}")
 print(f"Key is        : {key}")

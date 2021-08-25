@@ -1,18 +1,17 @@
-import math
+
 from os import system
 system("clear")
 
 # plainText = input("Enter the plain text : ")
 # key = input("Enter your key here : ")
-
-plainText = "ACT"
-key = "HILLMAG"
+import math
+plainText = "TKS"
+key = "HJPGQBT"
 
 print(f"Plain Text is : {plainText}")
 print(f"Key is        : {key}\n")
 
-#I am adding fillers so that if the len(key) is not perfect square thus we can use this additional 
-#alphabet to fill the rest of the key matrix
+
 def makeKeyMatrix(key):
     matrix = []
     # I am adding fillers because even if the key's Length is not equivalent to a prefect square 
@@ -31,14 +30,12 @@ def makeKeyMatrix(key):
       matrix.append(temp)
     return matrix
 
-
 #This is just for presentation of how the matrix will look like
 def showMatrix(matrix):
     for i in range(len(matrix)):
         for j in range (len(matrix[i])):
             print(f"{matrix[i][j]:{5}}", end=" ")
         print()
-
 
 def generateTextMatrix(plainText, length = len(plainText)):
     matrix = []
@@ -51,19 +48,12 @@ def generateTextMatrix(plainText, length = len(plainText)):
         matrix.append(temp)
     return matrix
 
-# def mod(a,b):
-#     return a%b
 
 def MultiInv(n):
     for i in range(26):
         if n*i%26 == 1:
-            print(f"\nMultiplicative Inverse of Modulation of Determinant is : {i}\n")
             return i
-    # if n == 0:
-    #     return (26, 0, 1)
-    # else:
-    #     g, y, x = MultiInv(26 % n)
-    #     return (g, x - (26 // n) * y, y)
+
 
 def matrixMultiply(matrix1, matrix2):
     matrix3 = []
@@ -178,9 +168,9 @@ def InverseMatrix(Matrix):
     newMatrix= []
     det = Det(Matrix)%26
     multiInv = MultiInv(det)
-    print(f"\nMultiplicative Inverse of Determinant is :{multiInv}")
+    print(f"Multiplicative Inverse of Determinant is :{multiInv}")
     newMatrix = divide(Adj(Matrix), multiInv)
-    print("\nInverse Matrix with (mod 26):")
+    print("Inverse Matrix with (mod 26):")
     showMatrix(newMatrix)
     return newMatrix
 

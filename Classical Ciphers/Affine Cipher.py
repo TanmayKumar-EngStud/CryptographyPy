@@ -5,17 +5,17 @@ os.system('clear')
 # key1 = int(input("Enter the multiplicative key: "))
 # key2 = int(input("Enter the additive key: "))
 
-plainText ="Testing"
-key1 = 7
-key2 = 5
+cipher ="ZEBBW"
+aKey = 2
+mKey = 7
 
-plainText = plainText.lower()
+cipher = cipher
 #Same General Setup
 def char(text):
-  return ord(text)-97
+  return ord(text)-ord('A')
 
 def num(number):
-  return chr(number+97)
+  return chr(number+ord('A'))
 
 # This is multiplicative inverse of key
 def MInverseKey(key):
@@ -30,26 +30,26 @@ def AInverseKey(key):
       return i
 
 #Encryption according to affine cipher
-def encrypt(plainText, Mkey, Akey):
-  cipherText = ""
-  for i in plainText:
-    cipherText += num(((char(i)*Mkey)+Akey)%26)
-  return cipherText
-cipher = encrypt(plainText, key1, key2)
-print(cipher)
+# def encrypt(plainText, Mkey, Akey):
+#   cipherText = ""
+#   for i in plainText:
+#     cipherText += num(((char(i)*Mkey)+Akey)%26)
+#   return cipherText
+# cipher = encrypt(plainText, key1, key2)
+# print(cipher)
 
 
 #Decryption according to affine cipher
 def decrypt(cipherText, Mkey, Akey):
   plainText = ""
-  new_Mkey = MInverseKey(key1)
-  new_Akey = AInverseKey(key2)
+  new_Mkey = MInverseKey(Mkey)
+  new_Akey = AInverseKey(Akey)
   print(new_Mkey)
   print(new_Akey)
   for i in cipherText:
-    plainText += num(((char(i)+new_Akey)*new_Mkey)%26)
+    plainText += num(((char(i)*new_Mkey)+new_Akey)%26)
   return plainText
-plain = decrypt(cipher, key1, key2)
+plain = decrypt(cipher, mKey, aKey)
 print("\n\n")
 print(plain)
 
