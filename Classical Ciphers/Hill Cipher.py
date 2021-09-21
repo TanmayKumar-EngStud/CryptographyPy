@@ -5,8 +5,8 @@ system("clear")
 # plainText = input("Enter the plain text : ")
 # key = input("Enter your key here : ")
 import math
-plainText = "TKS"
-key = "HJPGQBT"
+plainText = "FKMFIO"
+key = "CDDG"
 
 print(f"Plain Text is : {plainText}")
 print(f"Key is        : {key}\n")
@@ -37,14 +37,14 @@ def showMatrix(matrix):
             print(f"{matrix[i][j]:{5}}", end=" ")
         print()
 
-def generateTextMatrix(plainText, length = len(plainText)):
+def generateTextMatrix(plainText, key):
     matrix = []
-    for i in range(length):
+    cols = len(key[0])
+    rows = math.floor(len(plainText)/cols)
+    for i in range(rows):
         temp =[]
-        if i < len(plainText):
-            temp.append(ord(plainText[i].lower()) - 97)
-        else:
-            temp.append(ord('q') - 97)
+        for j in range(cols):
+            temp.append(ord((plainText[i*cols + j]).lower()) - ord('a'))
         matrix.append(temp)
     return matrix
 
@@ -54,17 +54,19 @@ def MultiInv(n):
         if n*i%26 == 1:
             return i
 
-
-def matrixMultiply(matrix1, matrix2):
-    matrix3 = []
-    for i in range(len(matrix1)):
-        matrix3.append([])
-        for j in range(len(matrix2[0])):
-            temp = 0
-            for k in range(len(matrix2)):
-                temp += (matrix1[i][k] * matrix2[k][j])%26
-            matrix3[i].append(temp)
-    return matrix3
+def matrixMultiplication(Matrix2, Matrix1):
+    resultantMatrix = []
+    for i in range(len(Matrix1)):
+        temp = []
+        for j in range(len(Matrix2[0])):
+            temp.append(0)
+        resultantMatrix.append(temp)
+    for i in range(len(Matrix1)):
+        for j in range(len(Matrix2[0])):
+            for k in range(len(Matrix2)):
+                resultantMatrix[i][j] += (Matrix1[i][k] * Matrix2[k][j])%26
+    showMatrix(resultantMatrix)
+    return resultantMatrix
 
 def TakeMod(Matrix):
     result = []
@@ -75,14 +77,13 @@ def TakeMod(Matrix):
         result.append(temp)
     return result
 
-
 def Encryption(plainText, key):
     keyMatrix = makeKeyMatrix(key)
     print("This is the key matrix :")
     showMatrix(keyMatrix)
 
-    plainTextMatrix  = generateTextMatrix(plainText, len(keyMatrix[0]))
-    cipherTextMatrix = matrixMultiply(keyMatrix, plainTextMatrix)
+    plainTextMatrix  = generateTextMatrix(plainText, keyMatrix)
+    cipherTextMatrix = matrixMultiplication(keyMatrix, plainTextMatrix)
     
     cipherText = ""
     print("\nPlain Text Matrix :")
@@ -96,8 +97,8 @@ def Encryption(plainText, key):
             cipherText += chr(cipherTextMatrix[i][j] + 65)
     return cipherText
 
-cipherText = Encryption(plainText, key)
-print(f"\nGenerated Cipher Text : {cipherText}")
+# cipherText = Encryption(plainText, key)
+# print(f"\nGenerated Cipher Text : {cipherText}")
 
 #Generates the Smaller matrix, just the part of calculation for taking determinant.
 def MiniMatrix(Matrix,i):
@@ -176,14 +177,16 @@ def InverseMatrix(Matrix):
 
 def Decryption(cipherText, key):
     keyMatrix = makeKeyMatrix(key)
-    cipherMatrix = generateTextMatrix(cipherText)
+    cipherMatrix = generateTextMatrix(cipherText, keyMatrix)
     InvKey = InverseMatrix(keyMatrix)
-    plainMatrix = TakeMod(matrixMultiply(InvKey, cipherMatrix))
+    print("\nInverse Plain Matrix is:")
+    plainMatrix = TakeMod(matrixMultiplication(InvKey, cipherMatrix))
     NewplainText =""
 
-    for i in plainMatrix:
-        NewplainText += chr(i[0]+ 65)
+    for j in plainMatrix:
+        for i in j:
+            NewplainText += chr(i+ 65)
     return NewplainText
 
-GeneratedPlainText = Decryption(cipherText, key)
+GeneratedPlainText = Decryption("FKMFIO", key)
 print(f"\nGenerated Plain Text : {GeneratedPlainText}")

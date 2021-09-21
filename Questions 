@@ -1,0 +1,12 @@
+Q1. The attacker is trying to brute force attack over the website
+In order to overcome this problem the developer created a cookie
+in such a way that every failed attempt of username will be stored 
+in cookies. And the user will not be able to try logging in.
+What can be the method for attacker to bypass the encrypted cookie?
+
+Q2. What is the use of Blacklisting and Whitelisting? where is it not 
+possible to use whitelisting for input validation, explain it with the 
+help of an example?
+
+Q3. What are the spidering techniques used in web functionalities? What
+What are the benifits of using spidering techniques?
