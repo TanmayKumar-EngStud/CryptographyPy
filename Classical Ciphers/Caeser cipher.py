@@ -1,11 +1,11 @@
 import os
 os.system('clear')
 
-# Text = input("\n\nEnter the text: ")
-# key = int(input("Enter the key: "))
+Text = input("\n\nEnter the text: ")
+key = int(input("Enter the key: "))
 
-Text = "VIT"
-key =7
+# Text = "VIT"
+# key =7
 
 Text = Text.lower()
 # I used ord function to convert the letter to its ASCII value.
@@ -21,7 +21,7 @@ def caesar(Text, key):
 
 cipherText =caesar(Text, key)
 #output for cipher text
-print(caesar(Text, key))
+print(f"Cipher Text : {caesar(Text, key)}")
 
 #Function for converting into cipher text to plain text
 def painText(Text, key):
@@ -39,4 +39,4 @@ def Zn(i):
 
 print("\n")
 #text for plain text
-print(painText(cipherText, key))
+print(f"Retrieved Plain Text : {painText(cipherText, key)}")
